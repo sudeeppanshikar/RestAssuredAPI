@@ -7,7 +7,7 @@ import io.restassured.response.Response;
 
 public class JsonUtilMapper {
 
-	public static <T> T deserialize(Response response, Class<T> targetclass) {
+	public static  <T> T deserialize(Response response, Class<T> targetclass) {
 
 		ObjectMapper mapper = new ObjectMapper();
 
