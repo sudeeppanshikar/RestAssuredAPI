@@ -1,8 +1,12 @@
 package com.qa.api.base;
 
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
 
 import com.qa.api.client.RestClient;
+
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
 
 public class BaseTest {
 
@@ -24,6 +28,12 @@ public class BaseTest {
 	protected final static String AMEDUS_ENDPOINT = "/v1/security/oauth2/token";
 	protected final static String AMADEUS_FLIGHT_DEST_ENDPOINT = "/v1/shopping/flight-destinations";
 
+	@BeforeSuite
+	public void setupAllureReports() {
+		RestAssured.filters(new AllureRestAssured());
+	}
+	
+	
 	@BeforeTest
 	public void setup() {
 		restclient = new RestClient();
