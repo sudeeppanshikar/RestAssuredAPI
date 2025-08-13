@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "sudo docker build -t ${DOCKER_IMAGE} ."
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
@@ -31,7 +31,7 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                        sudo echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         docker push ${DOCKER_IMAGE}
                        '''
                 }
@@ -50,7 +50,7 @@ pipeline {
            script {
             def status = sh(
                 script: """
-                    sudo docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
+                    docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
                     mvn test 
                 """,
                 returnStatus: true
@@ -74,7 +74,7 @@ pipeline {
                 script {
                     def status = sh(
                         script: """
-                  				sudo  docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
+                  				 docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
                   				  mvn test 
                					 """,
                         returnStatus: true
@@ -123,7 +123,7 @@ pipeline {
                 script {
                     def status = sh(
                         script: """
-                    			sudo docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
+                    			docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
                     			mvn test 
                 				""",
                         returnStatus: true
@@ -160,7 +160,7 @@ pipeline {
                 script {
                     def status = sh(
                         script: """
-                    			sudo docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
+                    			docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
                     			mvn test 
                				 """,
                         returnStatus: true
