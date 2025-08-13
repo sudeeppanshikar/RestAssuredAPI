@@ -1,0 +1,17 @@
+{
+	"id": {id},
+	"jsonrpc": "2.0",
+	"method": "createTeam",
+	"params": {
+		"place_ids": [
+			"ed4bb277-e76b-4a63-93d3-f0a1ecf86bde"
+		],
+		"robot_ids": [
+			"7f0dda56-694e-4933-9e43-2c516ac1a672"
+		],
+		"team": {
+			"description": "Client defined description for this record.",
+			"name": "{{name}}"
+		}
+	}
+}

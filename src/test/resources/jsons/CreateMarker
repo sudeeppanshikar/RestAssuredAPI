@@ -1,0 +1,34 @@
+{
+    "id": 12345,
+    "jsonrpc": "2.0",
+    "method": "createMarkers",
+    "params": {
+        "features": {
+            "features": [
+                {
+                    "geometry": {
+                        "coordinates": [
+                            8.323560114226451,
+                            -13.159097288039105
+                        ],
+                        "type": "Point"	
+                    },
+                    "properties": {
+                        "custom_length": 2,
+                        "custom_width": 1,
+                        "dock_zone_offset": 0,
+                        "id": "{{id}}",
+                        "item_type": "RZR_CHARGE_DOCK",
+                        "name": "100 Charger Endpoint - 84",
+                        "post_dock_angle": 0,
+                        "template_name": "rzr_charge",
+                        "yaw": -3.136055508243739
+                    },
+                    "type": "Feature"
+                }
+            ],
+            "type": "FeatureCollection"
+        },
+        "map_id": "{{map_id}}"
+    }
+}

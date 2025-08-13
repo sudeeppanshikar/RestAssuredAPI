@@ -39,7 +39,7 @@ public class UpdateUserTest extends BaseTest {
 		Assert.assertTrue(responseGet.statusLine().contains("OK"));
 		Assert.assertEquals(responseGet.jsonPath().getInt("id"), userid);
 
-		// Update the User - Put Call
+		// Update the User - Put Call using the same class object
 
 		user.setName("Chaya");
 		user.setStatus("inactive");

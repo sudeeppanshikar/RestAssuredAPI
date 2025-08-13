@@ -14,7 +14,7 @@ public class JsonUtilMapper {
 		try {
 			return mapper.readValue(response.getBody().asString(), targetclass);
 		} catch (Exception e) {
-
+			
 			throw new RuntimeException("Failed" + targetclass.getClass());
 		}
 

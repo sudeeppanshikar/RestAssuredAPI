@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="API Suite" verbose="3" thread-count="2" parallel="tests">
+<suite name="API Suite" verbose="3" thread-count="1" parallel="tests">
 
 
 	<test name="CreateUserTest">
 		<classes>
 			<class name="com.qa.api.gorest.CreateUserTest" />
+		</classes>
+	</test>
+
+	<test name="DeleteUserTest">
+		<classes>
+			<class name="com.qa.api.gorest.DeleteUserTest" />
+		</classes>
+	</test>
+
+	<test name="GetUserTest">
+		<classes>
+			<class name="com.qa.api.gorest.GetUserTest" />
+		</classes>
+	</test>
+	<test name="UpdateUserTest">
+		<classes>
+			<class name="com.qa.api.gorest.UpdateUserTest" />
 		</classes>
 	</test>
 

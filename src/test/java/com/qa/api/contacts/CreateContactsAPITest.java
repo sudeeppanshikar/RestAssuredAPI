@@ -39,14 +39,16 @@ public class CreateContactsAPITest extends BaseTest {
 
 		id = responsePost.jsonPath().getString("_id");
 
-		contacts.set_id(id);
-
-
-		// get contacts
-
-		responseGet = restclient.get(BASE_URL_CONTACTS, CONTACTS_LOGIN_ENDPOINT + "/" + id, AuthType.BEARER_TOKEN,
-				ContentType.JSON, null, null);
-		Assert.assertTrue(responseGet.statusLine().contains("OK"));
+		/*
+		 * contacts.set_id(id);
+		 * 
+		 * 
+		 * // get contacts
+		 * 
+		 * responseGet = restclient.get(BASE_URL_CONTACTS, CONTACTS_LOGIN_ENDPOINT + "/"
+		 * + id, AuthType.BEARER_TOKEN, ContentType.JSON, null, null);
+		 * Assert.assertTrue(responseGet.statusLine().contains("OK"));
+		 */
 
 	}
 

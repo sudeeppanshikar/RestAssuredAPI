@@ -10,6 +10,7 @@ public class ConfigManager {
 
 	static {
 
+		System.out.println("call");
 		InputStream ip = ConfigManager.class.getClassLoader().getResourceAsStream("config/config.properties");
 		if (ip != null) {
 			try {
