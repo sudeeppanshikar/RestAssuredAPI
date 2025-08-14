@@ -10,8 +10,12 @@ public class ConfigManager {
 
 	static {
 
-		System.out.println("call");
-		InputStream ip = ConfigManager.class.getClassLoader().getResourceAsStream("config/config.properties");
+		String envName = System.getProperty("env", "qa");
+
+		String filename = "config_" + envName + ".properties";
+
+		System.out.println(filename);
+		InputStream ip = ConfigManager.class.getClassLoader().getResourceAsStream(filename);
 		if (ip != null) {
 			try {
 				properties.load(ip);
