@@ -1,113 +1,64 @@
 pipeline {
-   
-   agent any
-   
-   tools {
-      maven 'maven'
-      jdk 'jdk'
-   }
-   
-   stages {
-      
-      stage("build") {
-         steps {
-            echo("build the project")
-            
-            
-            
-         }
-      }
-      
-      stage("Run Unit test") {
-         steps {
-            echo("run UTs")
-         }
-      }
-      
-      stage("Run Integration test") {
-         steps {
-            echo("run ITs")
-         }
-      }
-      
-      stage("Deploy to dev") {
-         steps {
-            echo("deploy to dev")
-         }
-      }
-      
-      stage("Deploy to QA") {
-         steps {
-            echo("deploy to QA")
-         }
-      }
-      
-      stage('Run Regression Automation Tests') {
-         
-         steps {
-            
-            git branch: 'master', url: 'https://github.com/sudeeppanshikar/RestAssuredAPI.git'
-            sh "mvn clean install"
-            
-         }
-         
-      }
-      
-      stage('Publish Allure Reports') {	
-         steps {
-            script {
-               allure([
-               includeProperties: false,
-               jdk: '',
-               properties: [],
-               reportBuildPolicy: 'ALWAYS',
-               results: [[path: 'allure-results']]
-               ])
+    agent any
+
+    tools {
+        maven 'maven'
+        jdk 'jdk'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/sudeeppanshikar/RestAssuredAPI.git'
             }
-         }
-      }
-      
-      stage("Deploy to stage") {
-         steps {
-            echo("deploy to stage")
-         }
-      }
-      
-      stage("Run sanity test cases on Stage") {
-         steps {
-            echo("Run sanity test cases on Stage")
-         }
-      }
-      
-      stage("Deploy to uat") {
-         steps {
-            echo("deploy to stage")
-         }
-      }
-      
-      stage("Run sanity test cases on uat") {
-         steps {
-            echo("Run sanity test cases on UAT")
-         }
-      }
-      
-      stage("Deploy to PROD") {
-         steps {
-            echo("deploy to PROD")
-         }
-      }
-      
-      
-      
-   }
-   
-   post {
-      always {
-         script {
-            echo "Build result is: ${currentBuild.result}"
-         }
-      }
-   }
-   
-   
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building the project"
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Run Unit & Integration Tests') {
+            steps {
+                echo "Running tests"
+                // Ignore test failures so Allure can generate results
+                sh 'mvn test -Dmaven.test.failure.ignore=true'
+            }
+        }
+
+        stage('Publish Allure Reports') {
+            steps {
+                script {
+                    allure([
+                        includeProperties: false,
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
+                }
+            }
+        }
+
+        stage('Deploy to Dev') {
+            steps {
+                echo "Deploying to Dev"
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Mark build as unstable if tests failed
+                def testFailed = sh(script: 'grep -q "Failures:" target/surefire-reports/*.txt', returnStatus: true)
+                if (testFailed == 0) {
+                    currentBuild.result = 'UNSTABLE'
+                    echo "Some tests failed — build marked UNSTABLE"
+                } else {
+                    echo "All tests passed"
+                }
+            }
+        }
+    }
 }
