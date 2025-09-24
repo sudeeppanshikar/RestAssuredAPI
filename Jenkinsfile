@@ -1,175 +1,113 @@
 pipeline {
-    agent any
-
-    tools {
-        maven 'maven'
-    }
-
-    environment {
-        DOCKER_IMAGE = "spanshikar/jan2025apiframework:${BUILD_NUMBER}"
-        DOCKER_CREDENTIALS_ID = 'dockerhub_credential'
-    }
-
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/sudeeppanshikar/RestAssuredAPI.git'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
-            }
-        }
-
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: "${DOCKER_CREDENTIALS_ID}",
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${DOCKER_IMAGE}
-                       '''
-                }
-            }
-        }
-
-        stage('Deploy to Dev') {
-            steps {
-                echo 'Deploying to Dev environment...'
-            }
-        }
-        
-
-        stage('Run Sanity Tests on Dev') {
+   
+   agent any
+   
+   tools {
+      maven 'maven'
+      jdk 'jdk'
+   }
+   
+   stages {
+      
+      stage("build") {
          steps {
-           script {
-            def status = sh(
-                script: """
-                    docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-                    mvn test 
-                """,
-                returnStatus: true
-            )
-            if (status != 0) {
-                currentBuild.result = 'UNSTABLE'
+            echo("build the project")
+            
+            
+            
+         }
+      }
+      
+      stage("Run Unit test") {
+         steps {
+            echo("run UTs")
+         }
+      }
+      
+      stage("Run Integration test") {
+         steps {
+            echo("run ITs")
+         }
+      }
+      
+      stage("Deploy to dev") {
+         steps {
+            echo("deploy to dev")
+         }
+      }
+      
+      stage("Deploy to QA") {
+         steps {
+            echo("deploy to QA")
+         }
+      }
+      
+      stage('Run Regression Automation Tests') {
+         
+         steps {
+            
+            git branch: 'main', url: 'https://github.com/sudeeppanshikar/RestAssuredAPI.git'
+            sh "mvn clean install"
+            
+         }
+         
+      }
+      
+      stage('Publish Allure Reports') {	
+         steps {
+            script {
+               allure([
+               includeProperties: false,
+               jdk: '',
+               properties: [],
+               reportBuildPolicy: 'ALWAYS',
+               results: [[path: '/allure-results']]
+               ])
             }
-        }
-    }
-}
-        
-
-        stage('Deploy to QA') {
-            steps {
-                echo 'Deploying to QA environment...'
-            }
-        }
-
-        stage('Run Regression Tests on QA') {
-            steps {
-                script {
-                    def status = sh(
-                        script: """
-                  				 docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-                  				  mvn test 
-               					 """,
-                        returnStatus: true
-                    )
-                    if (status != 0) {
-                        currentBuild.result = 'UNSTABLE'
-                    }
-                }
-            }
-        }
-
-        stage('Publish Allure Reports') {
-            steps {
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'target/allure-results']]
-                ])
-            }
-        }
-
-        stage('Publish ChainTest Report') {
-            steps {
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: 'target/chaintest',
-                    reportFiles: 'Index.html',
-                    reportName: 'HTML API Regression ChainTest Report',
-                    reportTitles: ''
-                ])
-            }
-        }
-
-        stage('Deploy to Stage') {
-            steps {
-                echo 'Deploying to Stage environment...'
-            }
-        }
-
-        stage('Run Sanity Tests on Stage') {
-            steps {
-                script {
-                    def status = sh(
-                        script: """
-                    			docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-                    			mvn test 
-                				""",
-                        returnStatus: true
-                    )
-                    if (status != 0) {
-                        currentBuild.result = 'UNSTABLE'
-                    }
-                }
-            }
-        }
-
-        stage('Publish Sanity ChainTest Report') {
-            steps {
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: 'target/chaintest',
-                    reportFiles: 'Index.html',
-                    reportName: 'HTML API Sanity ChainTest Report',
-                    reportTitles: ''
-                ])
-            }
-        }
-
-        stage('Deploy to Prod') {
-            steps {
-                echo 'Deploying to Prod environment...'
-            }
-        }
-
-        stage('Run Sanity Tests on Prod') {
-            steps {
-                script {
-                    def status = sh(
-                        script: """
-                    			docker run --rm -v \$WORKSPACE:/app -w /app ${DOCKER_IMAGE} \
-                    			mvn test 
-               				 """,
-                        returnStatus: true
-                    )
-                    if (status != 0) {
-                        currentBuild.result = 'UNSTABLE'
-                    }
-                }
-            }
-        }
-    }
+         }
+      }
+      
+      stage("Deploy to stage") {
+         steps {
+            echo("deploy to stage")
+         }
+      }
+      
+      stage("Run sanity test cases on Stage") {
+         steps {
+            echo("Run sanity test cases on Stage")
+         }
+      }
+      
+      stage("Deploy to uat") {
+         steps {
+            echo("deploy to stage")
+         }
+      }
+      
+      stage("Run sanity test cases on uat") {
+         steps {
+            echo("Run sanity test cases on UAT")
+         }
+      }
+      
+      stage("Deploy to PROD") {
+         steps {
+            echo("deploy to PROD")
+         }
+      }
+      
+      
+      
+   }
+   
+   post {
+      always {
+         script {
+            echo "Build result is: ${currentBuild.result}"
+         }
+      }
+   }
+   
+   
 }

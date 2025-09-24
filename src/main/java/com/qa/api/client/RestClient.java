@@ -89,13 +89,15 @@ public class RestClient {
 
 		RequestSpecification request = setupRequest(baseUrl, authType, contentType);
 		applyParams(request, pathParameter, queryParameter);
+
 		Response response = request.get(endpoint).then().spec(responseSpec200or201or404).extract().response();
+		
 		response.prettyPrint();
 		return response;
 	}
 
 	// oauth post
-	
+
 	/**
 	 * @param baseUrl
 	 * @param endpoint
@@ -128,14 +130,14 @@ public class RestClient {
 	 * @param authType
 	 * @param contentType
 	 * @return
-		 */
-		public <T> Response post(String baseUrl, String endpoint, T body, AuthType authType, ContentType contentType) {
-	
-			RequestSpecification request = setupRequest(baseUrl, authType, contentType);
-	
-			Response response = request.body(body).post(endpoint).then().spec(responseSpec200or201or404).extract()
-					.response();
-			response.prettyPrint();
+	 */
+	public <T> Response post(String baseUrl, String endpoint, T body, AuthType authType, ContentType contentType) {
+
+		RequestSpecification request = setupRequest(baseUrl, authType, contentType);
+
+		Response response = request.body(body).post(endpoint).then().spec(responseSpec200or201or404).extract()
+				.response();
+		response.prettyPrint();
 		return response;
 
 	}
@@ -154,7 +156,8 @@ public class RestClient {
 
 		RequestSpecification request = setupRequest(baseUrl, authType, contentType);
 
-		Response response = request.body(fileType).post(endpoint).then().spec(responseSpec200or201or404).extract().response();
+		Response response = request.body(fileType).post(endpoint).then().spec(responseSpec200or201or404).extract()
+				.response();
 		response.prettyPrint();
 		return response;
 

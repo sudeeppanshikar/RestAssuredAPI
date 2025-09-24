@@ -100,7 +100,10 @@ public class CreateUserTest extends BaseTest {
 
 		rawjson = rawjson.replace("{{emailid}}", StringUtils.getRandomemailid());
 		
-		Response response = restclient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, rawjson, AuthType.BEARER_TOKEN,
+		
+		File filetype = new File ("./src/test/resources/jsons/user.json");
+		
+		Response response = restclient.post(BASE_URL_GOREST, GOREST_USERS_ENDPOINT, filetype, AuthType.BEARER_TOKEN,
 				ContentType.JSON);
 
 		Assert.assertTrue(response.statusLine().contains("Created"));

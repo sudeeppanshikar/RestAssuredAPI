@@ -27,7 +27,7 @@ public class GetUserTest extends BaseTest {
 	public void getPathParameterTest() {
 
 		Map<String, String> pathParam = new HashMap<String, String>();
-		pathParam.put("userid", "7986385");
+		pathParam.put("userid", "7986385");	
 
 		restclient.get(BASE_URL_GOREST, GOREST_USERS_ENDPOINT_PATHPARAMETER, AuthType.BEARER_TOKEN, ContentType.JSON,
 				pathParam, null);

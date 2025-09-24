@@ -23,6 +23,8 @@ public class AmedusAPITest extends BaseTest {
 		Response response = restclient.post(BASE_URL_AMEDUS, AMEDUS_ENDPOINT, AuthType.NO_AUTH, ContentType.URLENC,
 				ConfigManager.get("granttype"), ConfigManager.get("clientid"), ConfigManager.get("clientsecret"));
 
+		System.out.println(ConfigManager.get("granttype"));
+		
 		String oauth_token = response.jsonPath().getString("access_token");
 		ConfigManager.set("bearertoken", oauth_token);
 
