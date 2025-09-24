@@ -46,7 +46,7 @@ pipeline {
          
          steps {
             
-            git branch: 'main', url: 'https://github.com/sudeeppanshikar/RestAssuredAPI.git'
+            git branch: 'master', url: 'https://github.com/sudeeppanshikar/RestAssuredAPI.git'
             sh "mvn clean install"
             
          }
